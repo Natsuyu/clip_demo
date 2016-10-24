@@ -7,7 +7,20 @@
   border: 2px solid #000; }
   .cover .ruler {
     position: absolute;
-    border: 2px dotted #39f; }
+    overflow: hidden;
+    top: 100px;
+    left: 200px;
+    cursor: move;
+    z-index: 3; }
+  .cover .ruler-block {
+    float: left;
+    border: 1.5px dotted #39f; }
+    .cover .ruler-block:nth-child(2) {
+      border-left-width: 0; }
+    .cover .ruler-block:nth-child(3), .cover .ruler-block:nth-child(4) {
+      border-top-width: 0; }
+    .cover .ruler-block:nth-child(4) {
+      border-left-width: 0; }
   .cover .container {
     width: 850px;
     height: 565px;

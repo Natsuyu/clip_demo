@@ -31,7 +31,7 @@
             obj.detachEvent("on" + event, callback)
         else obj["on" + event] = null
     }
-
+    var t = null
     var Croppy = (function() {
 
         function Croppy(item) {
@@ -45,11 +45,13 @@
             this.drag = false
             this.delta = 1
             this.angle = 0
+            this.isblock = false
             this.setting = Object.prototype.Croppy.Default
 
             this.ele = item
             this.image = new Image()
             this.image.src = item.src
+            this.step = this.setting.step
 
             this.width = this.setting.width
             this.height = this.setting.height
@@ -94,6 +96,17 @@
 
                 this.close = this.father.$(this.setting.selector.close)[0]
 
+                //about block
+                var rulerSize = this.setting.rulerSize
+                this.block = this.father.$(this.setting.selector.block)[0]
+                this.innblocks = this.block.$(this.setting.selector.innblock)
+                console.log(this.block, this.innblocks)
+                this.block.style.width = this.block.style.heigh = rulerSize + 2 + "px"
+                this.innblocks.forEach(function(item) {
+                        item.style.width = item.style.height = (rulerSize - 1) / 2 + "px"
+                    })
+                    // this.innblocks.style.width = (this.setting.rulerSize - 1) / 2
+
                 console.log(this.clip)
 
                 this._initcanvas()
@@ -109,19 +122,54 @@
                 ctx.drawImage(this.canvas, this.prex, this.prey, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height)
 
                 var ret = {
-                    x0: this.prex,
-                    y0: this.prey,
+                    x: this.prex,
+                    y: this.prey,
                     width: this.nowx - this.prex,
                     height: this.nowy - this.prey,
                     src: canvas.toDataURL("image/png")
                 }
+                this.push()
+
+                this.image = new Image()
+                this.image.src = ret.src
+                this.ctx.clearRect(0, 0, this.width, this.height)
+                this.ctx.drawImage(this.image, ret.x, ret.y, ret.width, ret.height)
+                this.initx = ret.x
+                this.inity = ret.y
 
                 $("#test")[0].src = ret.src
+            },
+
+            push: function() {
+                if (this.stack.length >= this.step) this.stack.shift()
+                this.stack.push(this._save())
+
+                this.ntstack.length = 0
+            },
+
+            _save: function() {
+                obj = {
+                    x: this.initx,
+                    y: this.inity,
+                    width: this.image.width,
+                    height: this.image.height,
+                    src: this.image.src
+                }
+                console.log(obj)
+                return {
+                    x: this.initx,
+                    y: this.inity,
+                    width: this.image.width,
+                    height: this.image.height,
+                    src: this.image.src
+                }
             },
 
             _earase: function() {
                 this.ctx.fillStyle = "#fff"
                 this.ctx.fillRect(this.prex, this.prey, this.nowx - this.prex, this.nowy - this.prey)
+
+                this.push()
 
                 this.image = new Image()
                 this.image.src = this.canvas.toDataURL("image/png")
@@ -129,9 +177,11 @@
                 this.ctx.clearRect(0, 0, this.width, this.height)
                 this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
                 this.initx = this.inity = 0
+
                 console.log("fill!")
 
             },
+
             _rotMarix: function(deg) {
                 var x = this.initx,
                     y = this.inity,
@@ -140,9 +190,15 @@
                 this.initx = x * cosd - sind * y
                 this.inity = sind * x + cosd * y
             },
+
             _clock: function(op) {
                 var ctx = this.ctx,
-                    pideg = this.angle += Math.PI * this.degree / 180 * (op ? 1 : -1)
+                    pideg = this.angle += Math.PI * this.degree / 180 * (op ? 1 : -1),
+                    obj = this._save()
+
+                if (this.stack.length >= this.step) this.stack.shift()
+                this.stack.push(obj)
+
                 ctx.save()
                 ctx.clearRect(0, 0, this.width, this.height)
                 ctx.translate(this.width / 2, this.height / 2)
@@ -165,13 +221,43 @@
             },
 
             _nextStep: function() {
-
+                this.ntpush()
             },
 
             _preStep: function() {
+                if (!this.stack.length) {
+                    console.log("init")
+                    return
+                }
+                var obj = this.stack.pop(),
+                    tar = this._save()
 
+                if (this.ntstack.length >= this.step) this.ntstack.shift()
+                this.ntstack.push(tar)
+
+                this.ctx.clearRect(0, 0, this.width, this.height)
+                console.log(obj)
+
+                this.image = new Image()
+                this.image.src = obj.src
+                this.image.width = obj.width
+                this.image.height = obj.height
+                this.initx = obj.x
+                this.inity = obj.y
+
+                this.ctx.drawImage(this.image, this.initx, this.inity, obj.width, obj.height)
             },
-
+            ntpush: function() {
+                var obj = null
+                if (this.ntstack.length) obj = this.ntstack.pop()
+                if (this.stack.length >= this.step) this.stack.shift()
+                this.stack.push(obj)
+            },
+            pop: function() {
+                if (this.stack.length) obj = this.stack.pop()
+                if (this.ntstack.length >= this.step) this.ntstack.shift()
+                this.ntstack.push(obj)
+            },
             _reset: function() {
                 this.image.src = this.ele.src
                 this.ctx.clearRect(0, 0, this.width, this.height)
@@ -188,23 +274,43 @@
 
             _mouseDown: function(e) {
                 e = e || window.event
-
+                clearTimeout(t)
+                this.ctx2.clearRect(0, 0, this.width, this.height)
                 var x = e.clientX || e.pageX,
                     y = e.clientY || e.clientY
-                if (x < this.baseX || x > this.baseX + this.width || y < this.baseY || y > this.baseY + this.height) return
-                console.log("down")
-                this.prex = x - this.baseX
-                this.prey = y - this.baseY
+
+                if (e.target.className == this.block.className || e.target.className == this.innblocks[0].className) {
+                    this.prex = x - this.block.offsetLeft - this.baseX
+                    this.prey = y - this.block.offsetTop - this.baseY
+                    this.isblock = true
+                } else {
+                    if (x < this.baseX || x > this.baseX + this.width || y < this.baseY || y > this.baseY + this.height) return
+                    console.log("down")
+                    this.prex = x - this.baseX
+                    this.prey = y - this.baseY
+                }
+
                 this.drag = true
+                this.lock = false
             },
 
+
             _mouseMove: function(e) {
+
                 if (!this.drag) return
+                this.lock = true
                 e = e || window.event
 
                 var x = (e.clientX || e.pageX) - this.baseX,
                     y = (e.clientY || e.pageY) - this.baseY
-                console.log(x, y)
+
+                if (this.isblock) {
+                    this.block.style.top = (y - this.prey) + "px"
+                    this.block.style.left = (x - this.prex) + "px"
+                    return
+                }
+
+                // console.log(x, y)
                 this.nowx = x <= 0 ? 0 : (x >= this.width ? this.width : x)
                 this.nowy = y <= 0 ? 0 : (y >= this.height ? this.height : y)
 
@@ -212,18 +318,29 @@
             },
 
             _mouseUp: function(e) {
-                if (!this.drag) return
-                this.drag = false
+
+                if (!this.drag || !this.lock) {
+                    this.drag = this.lock = this.isblock = false
+                    return
+                }
+
+                console.log("up")
+                this.drag = this.lock = this.isblock = false
+
                 if (this.op > 0) {
                     // clip is 1
                     console.log("clip")
                     this._clip()
 
-                } else {
+                } else if (this.op < 0) {
                     // earase is -1 
                     console.log("earase")
                     this._earase()
                 }
+                t = setTimeout(this._clearrect.bind(this), 500)
+            },
+            _clearrect: function() {
+                this.ctx2.clearRect(0, 0, this.width, this.height)
             },
             _zoom: function(orix, oriy) {
                 var ctx = this.ctx
@@ -293,8 +410,8 @@
                 return { x: x, y: y }
             },
             _initcanvas: function() {
-                this.canvas.style.cssText = "z-index:1100;"
-                this.floor.style.cssText = "z-index:1101;"
+                // this.canvas.style.cssText = "z-index:1100;"
+                // this.floor.style.cssText = "z-index:1101;"
 
                 var init = this._getScale(),
                     base = this.getOffset(this.layer)
@@ -326,6 +443,8 @@
                 addEvent("mousewheel", function() {
                     that._mouseScroll()
                 }, this.layer)
+
+
 
 
                 addEvent("click", function() {
@@ -397,11 +516,15 @@
             preStep: ".preStep",
             nextStep: ".nextStep",
             reset: ".reset",
-            close: ".close"
+            close: ".close",
+            block: ".ruler",
+            innblock: ".ruler-block"
         },
+        rulerSize: 12,
         width: 850,
         height: 515,
         degree: 10,
+        step: 5,
         speed: 600 //100-> fast, 1000->slow
     }
 })()
