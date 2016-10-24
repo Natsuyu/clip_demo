@@ -123,7 +123,12 @@
                 this.ctx.fillStyle = "#fff"
                 this.ctx.fillRect(this.prex, this.prey, this.nowx - this.prex, this.nowy - this.prey)
 
+                this.image = new Image()
+                this.image.src = this.canvas.toDataURL("image/png")
 
+                this.ctx.clearRect(0, 0, this.width, this.height)
+                this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
+                this.initx = this.inity = 0
                 console.log("fill!")
 
             },
@@ -249,7 +254,6 @@
             },
 
             drawrect: function() {
-
                 this.ctx2.clearRect(0, 0, this.width, this.height)
                 this.ctx2.strokeStyle = "#39f"
 
@@ -304,7 +308,7 @@
 
                 this.ctx.clearRect(0, 0, this.width, this.height)
                 this.ctx2.clearRect(0, 0, this.width, this.height)
-                console.log(this.image)
+
                 this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
             },
 
