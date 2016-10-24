@@ -1,0 +1,51 @@
+$width: 850px;
+$c-height: 515px;
+$height: 565px;
+.cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #000;
+    .ruler {
+        position: absolute;
+        border: 2px dotted #39f;
+    }
+    .container {
+        width: $width;
+        height: $height;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: - $width / 2;
+        margin-top: - $height / 2;
+        background-color: rgba(255, 0, 12, 0.2);
+    }
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .layer-content {
+        width: $width;
+        height: $c-height;
+        position: relative;
+    }
+    .toolbar {
+        overflow: hidden;
+        margin: 10px auto;
+        &>div {
+            cursor: pointer;
+            padding: 3px 5px;
+            float: left;
+            margin: 10px;
+            border: 1px solid red;
+        }
+    }
+    .tools {
+        &>* {
+            float: left;
+        }
+    }
+}

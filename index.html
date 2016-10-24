@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/croppy.css">
+</head>
+
+<body>
+    <img src="" alt="" id="test">
+    <div class="wrapper">
+        <img src="img/2.png" alt="" class="img" style="visibility: hidden">
+        <div class="cover">
+            <div class="container">
+                <div class="layer-content">
+                    <canvas class="canvas"></canvas>
+                    <canvas class="canvas-cover"></canvas>
+                </div>
+                <div class="toolbar">
+                    <div class="clip">裁剪</div>
+                    <div class="earase">擦除</div>
+                    <div class="match">文字匹配</div>
+                    <div class="tools">
+                        <div class="clock">顺时针旋转</div>
+                        <input class="deg" type="text" placeholder="1">
+                        <div class="unclock">逆时针旋转</div>
+                    </div>
+                    <div class="tools">
+                        <div class="preStep">上一步</div>
+                        <div class="nextStep">下一步</div>
+                    </div>
+                    <div class="tools">
+                        <div class="reset">重置</div>
+                        <div class="close">关闭</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="js/croppy.js"></script>
+    <script>
+        $(".img").Croppy()
+    </script>
+</body>
+
+</html>
