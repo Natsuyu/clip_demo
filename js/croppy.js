@@ -292,19 +292,25 @@
                 this._draw()
             },
             _reset: function() {
+                this.image = new Image()
                 this.image.src = this.ele.src
-                console.log(this.ele.src)
-                this.initx = this.originx, this.inity = this.originy
+                var that = this
+                addEvent("load", function() {
+                        that.init()
+                    }, this.image)
+                    // console.log(this.ele.src)
+                    // this.initx = this.originx, this.inity = this.originy
 
-                this._initInn()
+                // this._initInn()
 
-                this.ctx.clearRect(0, 0, this.width, this.height)
-                this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
-                this.stack = [
-                    [],
-                    []
-                ]
-                console.log("function")
+                // this.ctx.clearRect(0, 0, this.width, this.height)
+
+                // this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
+                // this.stack = [
+                //     [],
+                //     []
+                // ]
+                // console.log("function")
             },
 
             _resize: function() {
@@ -454,8 +460,10 @@
                     initx = (this.width - this.height * img_ratio) / 2
                     this.image.width = this.width - initx * 2
                     this.image.height = this.height
-                }
 
+                }
+                this.oriw = this.image.width
+                this.orih = this.image.height
                 return { x: initx, y: inity }
             },
             getOffset: function(tar) {
@@ -495,7 +503,6 @@
 
                 this._initInn()
 
-                $("#test")[0].src = this.inncan.toDataURL("image/png")
             },
 
             _activeBtn: function(obj) {
