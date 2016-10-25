@@ -8,8 +8,10 @@
 
 
 
+
 ####Pay Attention
 1. not like this....
 2. 论优先级的重要性。。。
 3. 可以用箭头函数代替that， 但是不知道es6的兼容性怎么样
 4. settimeout中的回调函数只是装载了函数代码，执行的时候this还会改变??
+5. 经常犯的错，图片要加载后再运行，onload啊！！
