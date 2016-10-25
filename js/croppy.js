@@ -428,7 +428,7 @@
                 setTimeout(function() {
                     that._draw()
                 }, 0)
-                console.log(this.delta)
+
                 e.preventDefault() || (e.returnValue = false)
                 return false
             },
