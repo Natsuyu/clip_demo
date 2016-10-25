@@ -247,8 +247,6 @@
                 this.angle += Math.PI * this.degree / 180 * (op ? 1 : -1)
 
                 this._draw()
-
-                $("#test")[0].src = this.canvas.toDataURL("image/png")
             },
 
             _match: function() {
@@ -304,7 +302,6 @@
                     [],
                     []
                 ]
-                console.log("function")
             },
 
             _resize: function() {
@@ -393,17 +390,14 @@
                     return
                 }
 
-                console.log("up")
                 this.drag = this.lock = this.isblock = false
 
                 if (this.op > 0) {
                     // clip is 1
-                    console.log("clip")
                     this._clip()
 
                 } else if (this.op < 0) {
                     // earase is -1 
-                    console.log("earase")
                     this._earase()
                 }
                 t = setTimeout(this._clearrect.bind(this), 300)
@@ -495,7 +489,6 @@
 
                 this._initInn()
 
-                $("#test")[0].src = this.inncan.toDataURL("image/png")
             },
 
             _activeBtn: function(obj) {
