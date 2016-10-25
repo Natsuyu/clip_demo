@@ -45,10 +45,7 @@
             this.ntstack = []
             this.lock = false
             this.op = 0
-            this.drag = false
-            this.delta = 1
-            this.angle = 0
-            this.isblock = false
+
             this.setting = Object.prototype.Croppy.Default
             this.bshow = false //block show
             this.ele = item
@@ -297,18 +294,21 @@
                 console.log(that)
                 addEvent("load", function() {
                     console.log(that)
-                    that.initx = that.originx
-                    that.inity = that.originy
-                    console.log(that.initx, that.inity)
-                    that._initInn()
+                        // that.initx = that.originx
+                        // that.inity = that.originy
+                        // that.angle = 0
+                        // that.delta = 1
+                        // that._initInn()
 
-                    that.ctx.clearRect(0, 0, that.width, that.height)
+                    // that.ctx.clearRect(0, 0, that.width, that.height)
 
-                    that.ctx.drawImage(that.image, that.initx, that.inity, that.image.width, that.image.height)
-                    that.stack = [
-                        [],
-                        []
-                    ]
+                    // that.ctx.drawImage(that.image, that.initx, that.inity, that.image.width, that.image.height)
+                    // that.stack = [
+                    //     [],
+                    //     []
+                    // ]
+
+                    that._initcanvas()
                 }, this.image)
 
             },
@@ -479,6 +479,11 @@
                 this.innctx.drawImage(this.image, 0, 0, this.image.width, this.image.height)
             },
             _initcanvas: function() {
+                this.drag = false
+                this.delta = 1
+                this.angle = 0
+                this.isblock = false
+
                 var init = this._getScale(),
                     base = this.getOffset(this.layer)
 
