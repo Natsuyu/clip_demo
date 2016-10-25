@@ -1,26 +1,30 @@
 .cover {
+  font-size: 14px;
   position: fixed;
+  z-index: 1000;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  border: 2px solid #000; }
+  background: rgba(0, 0, 0, 0.5); }
   .cover .ruler {
     position: absolute;
     overflow: hidden;
-    top: 100px;
-    left: 200px;
+    top: 250px;
+    left: 400px;
     cursor: move;
-    z-index: 3; }
+    z-index: 3;
+    display: none; }
   .cover .ruler-block {
     float: left;
-    border: 1.5px dotted #39f; }
+    border-style: dotted;
+    border-color: #39f; }
     .cover .ruler-block:nth-child(2) {
-      border-left-width: 0; }
+      border-left-width: 0 !important; }
     .cover .ruler-block:nth-child(3), .cover .ruler-block:nth-child(4) {
-      border-top-width: 0; }
+      border-top-width: 0 !important; }
     .cover .ruler-block:nth-child(4) {
-      border-left-width: 0; }
+      border-left-width: 0 !important; }
   .cover .container {
     width: 850px;
     height: 565px;
@@ -28,8 +32,7 @@
     top: 50%;
     left: 50%;
     margin-left: -425px;
-    margin-top: -282.5px;
-    background-color: rgba(255, 0, 12, 0.2); }
+    margin-top: -282.5px; }
   .cover canvas {
     position: absolute;
     top: 0;
@@ -40,14 +43,40 @@
     position: relative; }
   .cover .toolbar {
     overflow: hidden;
-    margin: 10px auto; }
-    .cover .toolbar > div {
-      cursor: pointer;
-      padding: 3px 5px;
-      float: left;
-      margin: 10px;
-      border: 1px solid red; }
-  .cover .tools > * {
+    margin: 10px auto;
+    padding-left: 55px; }
+  .cover .btn {
+    color: #fff;
+    cursor: pointer;
+    padding: 6px 12px;
+    float: left;
+    border: 1px solid #2e6da4;
+    background-color: #337ab7;
+    border-radius: 3px;
+    line-height: 20px; }
+  .cover input {
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    box-sizing: border-box;
+    height: 34px;
+    line-height: 20px;
+    width: 40px;
+    border-top: 1px solid #2e6da4;
+    border-bottom: 1px solid #2e6da4; }
+  .cover .tools {
+    margin: 10px 0 0 10px;
+    overflow: hidden;
     float: left; }
+    .cover .tools > * {
+      float: left;
+      border-radius: 0; }
+      .cover .tools > *:first-child {
+        border-radius: 3px 0 0 3px; }
+      .cover .tools > *:last-child {
+        border-radius: 0 3px 3px 0; }
+  .cover .active {
+    background-color: #286090;
+    border-color: #204d74; }
 
 /*# sourceMappingURL=croppy.css.map */

@@ -4,36 +4,38 @@ $height: 565px;
 $boxsize: 12px;
 $linewidth: 2px;
 .cover {
+    font-size: 14px;
     position: fixed;
+    z-index: 1000;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    border: 2px solid #000;
+    background: rgba(0, 0, 0, 0.5);
     .ruler {
         position: absolute;
         overflow: hidden;
-        top: 100px;
-        left: 200px;
+        top: 250px;
+        left: 400px;
         cursor: move;
-        // width: $boxsize * 2 + $linewidth*3;
-        // height: $boxsize * 2 + $linewidth*3;
         z-index: 3;
+        display: none;
     }
     .ruler-block {
         // width: $boxsize;
         // height: $boxsize;
         float: left;
-        border: 1.5px dotted #39f;
+        border-style: dotted;
+        border-color: #39f;
         &:nth-child(2) {
-            border-left-width: 0;
+            border-left-width: 0 !important;
         }
         &:nth-child(3),
         &:nth-child(4) {
-            border-top-width: 0;
+            border-top-width: 0 !important;
         }
         &:nth-child(4) {
-            border-left-width: 0;
+            border-left-width: 0 !important;
         }
     }
     .container {
@@ -44,7 +46,6 @@ $linewidth: 2px;
         left: 50%;
         margin-left: - $width / 2;
         margin-top: - $height / 2;
-        background-color: rgba(255, 0, 12, 0.2);
     }
     canvas {
         position: absolute;
@@ -59,17 +60,47 @@ $linewidth: 2px;
     .toolbar {
         overflow: hidden;
         margin: 10px auto;
-        &>div {
-            cursor: pointer;
-            padding: 3px 5px;
-            float: left;
-            margin: 10px;
-            border: 1px solid red;
-        }
+        padding-left: 55px;
+    }
+    .btn {
+        color: #fff;
+        cursor: pointer;
+        padding: 6px 12px;
+        float: left;
+        // margin: 10px;
+        border: 1px solid #2e6da4;
+        background-color: #337ab7;
+        border-radius: 3px;
+        line-height: 20px;
+    }
+    input {
+        padding: 0;
+        margin: 0;
+        display: inline-block;
+        box-sizing: border-box;
+        height: 34px;
+        line-height: 20px;
+        width: 40px;
+        border-top: 1px solid #2e6da4;
+        border-bottom: 1px solid #2e6da4;
     }
     .tools {
+        margin: 10px 0 0 10px;
+        overflow: hidden;
+        float: left;
         &>* {
             float: left;
+            border-radius: 0;
+            &:first-child {
+                border-radius: 3px 0 0 3px;
+            }
+            &:last-child {
+                border-radius: 0 3px 3px 0;
+            }
         }
+    }
+    .active {
+        background-color: #286090;
+        border-color: #204d74;
     }
 }
