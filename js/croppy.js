@@ -294,22 +294,23 @@
                 this.image.src = this.ele.src
 
                 var that = this
+                console.log(that)
                 addEvent("load", function() {
-                        that.init()
-                    }, this.image)
-                    // console.log(this.ele.src)
-                    // this.initx = this.originx, this.inity = this.originy
+                    console.log(that)
+                    that.initx = that.originx
+                    that.inity = that.originy
+                    console.log(that.initx, that.inity)
+                    that._initInn()
 
-                // this._initInn()
+                    that.ctx.clearRect(0, 0, that.width, that.height)
 
-                // this.ctx.clearRect(0, 0, this.width, this.height)
+                    that.ctx.drawImage(that.image, that.initx, that.inity, that.image.width, that.image.height)
+                    that.stack = [
+                        [],
+                        []
+                    ]
+                }, this.image)
 
-                // this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
-                // this.stack = [
-                //     [],
-                //     []
-                // ]
-                // console.log("function")
             },
 
             _resize: function() {
@@ -484,7 +485,7 @@
                 this.baseX = base.x
                 this.baseY = base.y
                 this.initx = this.originx = init.x
-                this.inity = this.originx = init.y
+                this.inity = this.originy = init.y
 
                 this.ctx = this.canvas.getContext('2d')
                 this.ctx2 = this.floor.getContext('2d')
@@ -594,6 +595,7 @@
                 addEvent("resize", function() {
                     that._resize()
                 })
+
             }
         }
 
