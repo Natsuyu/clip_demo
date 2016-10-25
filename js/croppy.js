@@ -114,28 +114,27 @@
             },
 
             _clip: function() {
-                var canvas = document.createElement("canvas"),
-                    ctx = canvas.getContext("2d")
-                canvas.width = this.nowx - this.prex
-                canvas.height = this.nowy - this.prey
+                this.inncan.width = this.nowx - this.prex
+                this.inncan.height = this.nowy - this.prey
 
-                ctx.drawImage(this.canvas, this.prex, this.prey, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height)
+                this.innctx.drawImage(this.canvas, this.prex, this.prey, this.inncan.width, this.inncan.height, 0, 0, this.inncan.width, this.inncan.height)
+
+                this.initx = this.prex, this.inity = this.prey
 
                 var ret = {
                     x: this.prex,
                     y: this.prey,
                     width: this.nowx - this.prex,
                     height: this.nowy - this.prey,
-                    src: canvas.toDataURL("image/png")
+                    src: this.inncan.toDataURL("image/png")
                 }
-                this.push()
 
                 this.image = new Image()
                 this.image.src = ret.src
                 this.ctx.clearRect(0, 0, this.width, this.height)
-                this.ctx.drawImage(this.image, ret.x, ret.y, ret.width, ret.height)
-                this.initx = ret.x
-                this.inity = ret.y
+                    //rotate 
+                    //scale 
+                this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
 
                 $("#test")[0].src = ret.src
             },
@@ -166,22 +165,57 @@
             },
 
             _earase: function() {
-                this.ctx.fillStyle = "#fff"
-                this.ctx.fillRect(this.prex, this.prey, this.nowx - this.prex, this.nowy - this.prey)
+                var p1 = this._tmpMatrix(this.prex, this.prey),
+                    p2 = this._tmpMatrix(this.nowx, this.prey),
+                    p3 = this._tmpMatrix(this.nowx, this.nowy),
+                    p4 = this._tmpMatrix(this.prex, this.nowy),
+                    innctx = this.innctx,
+                    inncan = this.inncan
 
-                this.push()
+                innctx.save()
+                innctx.beginPath()
+
+                innctx.moveTo(p1.x - this.initx, p1.y - this.inity)
+                innctx.lineTo(p2.x - this.initx, p2.y - this.inity)
+                innctx.lineTo(p3.x - this.initx, p3.y - this.inity)
+                innctx.lineTo(p4.x - this.initx, p4.y - this.inity)
+                innctx.lineTo(p1.x - this.initx, p1.y - this.inity)
+                innctx.closePath()
+                innctx.clip()
+                innctx.fillStyle = "#fff"
+                innctx.fillRect(0, 0, this.width, this.height)
+                innctx.restore()
 
                 this.image = new Image()
-                this.image.src = this.canvas.toDataURL("image/png")
+                this.image.src = inncan.toDataURL("image/png")
 
+                // this.ctx.clearRect(0, 0, this.width, this.height)
+                // this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
+                // this.initx = this.inity = 0
+                this.ctx.save()
                 this.ctx.clearRect(0, 0, this.width, this.height)
-                this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
-                this.initx = this.inity = 0
+                this.ctx.translate(this.width / 2, this.height / 2)
+
+                this.ctx.rotate(this.angle)
+                this.ctx.translate(-this.width / 2, -this.height / 2)
+
+                // this._rotMarix(pideg)
+                this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
+                this.ctx.restore()
 
                 console.log("fill!")
 
             },
-
+            _tmpMatrix: function(xx, yy) {
+                var cosd = Math.cos(-this.angle),
+                    sind = Math.sin(-this.angle),
+                    ix = this.width / 2,
+                    iy = this.height / 2
+                return {
+                    x: (xx - ix) * cosd - sind * (yy - iy) + ix,
+                    y: sind * (xx - ix) + cosd * (yy - iy) + iy
+                }
+            },
             _rotMarix: function(deg) {
                 var x = this.initx,
                     y = this.inity,
@@ -427,6 +461,11 @@
                 this.ctx2.clearRect(0, 0, this.width, this.height)
 
                 this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
+
+                this.inncan = document.createElement("canvas")
+                this.innctx = this.inncan.getContext("2d")
+                this.inncan.width = this.image.width, this.inncan.height = this.image.height
+                this.innctx.drawImage(this.image, 0, 0, this.image.width, this.image.height)
             },
 
             _initEvent: function() {
