@@ -483,6 +483,7 @@
                 this.delta = 1
                 this.angle = 0
                 this.isblock = false
+                this.movex = this.movey = 0
 
                 var init = this._getScale(),
                     base = this.getOffset(this.layer)

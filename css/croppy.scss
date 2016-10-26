@@ -56,6 +56,7 @@ $linewidth: 2px;
         width: $width;
         height: $c-height;
         position: relative;
+        overflow: hidden;
     }
     .toolbar {
         overflow: hidden;
