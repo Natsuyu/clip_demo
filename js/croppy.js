@@ -571,13 +571,17 @@
                 }, this.layer)
 
                 addEvent("click", function() {
-                    that.op = 1
+                    // that.op = 1
                     that._activeBtn(that.clip)
+                    if (that.clip.active) that.op = 1
+                    else that.op = 0
                 }, this.clip)
 
                 addEvent("click", function() {
-                    that.op = -1
+                    // that.op = -1
                     that._activeBtn(that.earase)
+                    if (that.earase.active) that.op = -1
+                    else that.op = 0
                 }, this.earase)
 
                 addEvent("click", function() {
