@@ -7,6 +7,14 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5); }
+  .cover .tip {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    top: -40px;
+    display: none; }
   .cover .ruler {
     position: absolute;
     overflow: hidden;
@@ -53,7 +61,7 @@
   .cover .toolbar {
     overflow: hidden;
     margin: 10px auto;
-    padding-left: 30px; }
+    padding-left: 200px; }
   .cover .btn {
     color: #fff;
     cursor: pointer;
@@ -87,5 +95,13 @@
   .cover .active {
     background-color: #286090;
     border-color: #204d74; }
+  .cover .match {
+    display: none !important; }
+  .cover #rotate {
+    display: none !important; }
+  .cover .sure {
+    position: absolute;
+    right: 100px;
+    display: none; }
 
 /*# sourceMappingURL=croppy.css.map */

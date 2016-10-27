@@ -12,6 +12,15 @@ $linewidth: 2px;
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
+    .tip {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        text-align: center;
+        position: absolute;
+        width: 100%;
+        top: -40px;
+        display: none;
+    }
     .ruler {
         position: absolute;
         overflow: hidden;
@@ -70,7 +79,7 @@ $linewidth: 2px;
     .toolbar {
         overflow: hidden;
         margin: 10px auto;
-        padding-left: 30px;
+        padding-left: 200px;
     }
     .btn {
         color: #fff;
@@ -112,5 +121,16 @@ $linewidth: 2px;
     .active {
         background-color: #286090;
         border-color: #204d74;
+    }
+    .match {
+        display: none !important;
+    }
+    #rotate {
+        display: none !important;
+    }
+    .sure {
+        position: absolute;
+        right: 100px;
+        display: none;
     }
 }

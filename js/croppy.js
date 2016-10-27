@@ -102,6 +102,11 @@
 
                 this.btn = this.father.$(this.setting.selector.btn)
 
+                this.sure = this.father.$(this.setting.selector.sure)[0]
+
+                this.tip = this.father.$(this.setting.selector.tip)[0]
+                this.toolbar = this.father.$(this.setting.selector.toolbar)
+                    // this.toolbar[1].style.cssText = "display: none;"
 
                 //init style
                 var rulerSize = this.setting.rulerSize * this.setting.scaleSize,
@@ -129,7 +134,7 @@
             _clip: function() {
                 this._pushState(false)
                 this.stack[1].length = 0
-
+                console.log(this)
                 var inncan = this.inncan,
                     innctx = this.innctx
 
@@ -143,9 +148,7 @@
                 this.image = new Image()
                 this.image.src = inncan.toDataURL("image/png")
 
-                this.initx = (this.width - this.image.width) / 2
-                this.inity = (this.height - this.image.height) / 2
-                this.movex = this.movey = 0
+
 
 
                 var that = this
@@ -155,6 +158,9 @@
 
 
                     // that.ctx.drawImage(that.image, that.initx, that.inity, that.image.width, that.image.height)
+                    that.initx = (that.width - that.image.width) / 2
+                    that.inity = (that.height - that.image.height) / 2
+                    that.movex = that.movey = 0
                     that._draw()
                 }, 400)
 
@@ -189,7 +195,7 @@
                     p4 = this._tmpMatrix(this.prex, this.nowy),
                     innctx = this.innctx,
                     inncan = this.inncan
-
+                console.log(p1, p2, p3, p4)
                 innctx.save()
                 innctx.beginPath()
 
@@ -205,9 +211,12 @@
                 innctx.restore()
 
                 this.image = new Image()
-                this.image.src = inncan.toDataURL("image/png")
-
-                this._draw()
+                $("#test")[0].src = this.image.src = inncan.toDataURL("image/png")
+                var that = this
+                addEvent("load", function() {
+                        that._draw()
+                    }, this.image)
+                    // this._draw()
             },
 
             _tmpMatrix: function(xx, yy) {
@@ -306,7 +315,7 @@
                     width = canvas.width * this.delta / scale,
                     height = canvas.height * this.delta / scale,
                     image = new Image()
-
+                console.log(tmpctx)
                 tmpcan.width = width
                 tmpcan.height = height
                 tmpctx.save()
@@ -322,24 +331,31 @@
 
                 $("#test")[0].src = tmpcan.toDataURL("image/png")
 
+
+
             },
 
             _mouseDown: function(e) {
+
                 e = e || window.event
                 clearTimeout(t)
                 this.ctx2.clearRect(0, 0, this.width, this.height)
+                console.log(e)
                 var x = e.clientX || e.pageX,
                     y = e.clientY || e.clientY
-
+                console.log("??", this.prex)
                 if (e.target.className == this.block.className || e.target.className == this.innblocks[0].className) {
                     this.prex = x - this.block.offsetLeft - this.baseX
                     this.prey = y - this.block.offsetTop - this.baseY
                     this.isblock = true
                 } else {
                     if (x < this.baseX || x > this.baseX + this.width || y < this.baseY || y > this.baseY + this.height) return
+
                     console.log("down")
+
                     this.prex = x - this.baseX
                     this.prey = y - this.baseY
+
                 }
 
                 this.tmpy = this.movey, this.tmpx = this.movex
@@ -378,6 +394,8 @@
                 return Math.min(a, Math.min(b, Math.min(c, Math.min(d))))
             },
             _draw: function() {
+
+
                 var ctx = this.ctx
                 ctx.save()
 
@@ -389,25 +407,10 @@
                 ctx.scale(this.delta, this.delta)
                 ctx.rotate(this.angle)
                 ctx.translate(-this.width / 2, -this.height / 2)
-                    // var x = this.initx + this.movex,
-                    //     y = this.inity + this.movey,
-                    //     w = this.image.width,
-                    //     h = this.image.height
 
-                // var p1 = this._tmpMatrix(x, y),
-                //     p2 = this._tmpMatrix(x + w, y),
-                //     p3 = this._tmpMatrix(x + w, y + h),
-                //     p4 = this._tmpMatrix(x, y + h)
-
-                // var x0 = this._min(p1.x, p2.x, p3.x, p4.x)
-                // y0 = this._min(p1.y, p2.y, p3.y, p4.y)
-                // x1 = this._max(p1.x, p2.x, p3.x, p4.x)
-                // y1 = this._max(p1.y, p2.y, p3.y, p4.y)
-                // ctx.fillRect(x0, y0, x1 - x0, y1 - y0)
                 ctx.drawImage(this.image, this.initx + this.movex, this.inity + this.movey, this.image.width, this.image.height)
+
                 ctx.restore()
-
-
             },
             _canMove: function() {
                 var dx = this.nowx - this.prex,
@@ -542,6 +545,8 @@
 
                 this.baseX = base.x
                 this.baseY = base.y
+                this.prex = this.prey = 0
+                this.nowx = this.nowy = 0
                 this.initx = this.originx = init.x
                 this.inity = this.originy = init.y
 
@@ -562,17 +567,19 @@
 
             },
             _match: function() {
+                // if (!this.match) return
                 if (this.match.active) this.block.style.display = "block"
                 else this.block.style.display = "none"
             },
             _activeBtn: function(obj) {
                 var that = this
                 this.btn.forEach(function(item) {
-                    if (item == obj) return
-                    item.active = false
-                    item.style.cssText = ""
-                    if (item == that.match) that.block.style.display = "none"
-                })
+                        if (item == obj) return
+                        item.active = false
+                        item.style.cssText = ""
+                        if (item == that.match) that.block.style.display = "none"
+                    })
+                    // if (!obj) return
                 obj.active = !obj.active
                 if (obj.active) obj.style.cssText = this.setting.style.active
                 else obj.style.cssText = ""
@@ -586,17 +593,18 @@
                 this.btn.forEach(function(item) {
                     item.active = false
                 })
-                addEvent("mousedown", function() {
-                    that._mouseDown()
+                addEvent("mousedown", function(e) {
+                    console.log(e)
+                    that._mouseDown(e)
                 })
-                addEvent("mousemove", function() {
-                    that._mouseMove()
+                addEvent("mousemove", function(e) {
+                    that._mouseMove(e)
                 })
-                addEvent("mouseup", function() {
-                    that._mouseUp()
+                addEvent("mouseup", function(e) {
+                    that._mouseUp(e)
                 })
-                addEvent("mousewheel", function() {
-                    that._mouseScroll()
+                addEvent("mousewheel", function(e) {
+                    that._mouseScroll(e)
                 }, this.layer)
 
                 addEvent("click", function() {
@@ -609,6 +617,17 @@
                     that._otoback()
 
                 }, this.oto)
+
+                addEvent("click", function() {
+
+                    // that._activeBtn(that.oto)
+                    // setTimeout(function() {
+                    // that.oto.style.cssText = ""
+                    // }, 200)
+
+                    that._close()
+
+                }, this.sure)
 
                 addEvent("click", function() {
                     // that.op = 1
@@ -672,7 +691,13 @@
                 addEvent("click", function() {
                     that.op = 0
                     that._activeBtn(that.close)
-                    that._close()
+                        // that._close()
+                    console.log(that.match)
+                    that.match.active = 1
+                    that.toolbar[0].style.cssText = "display:none"
+                    that.sure.style.display = "block"
+                    that.tip.style.display = "block"
+                    that._match()
 
                 }, this.close)
 
@@ -722,7 +747,10 @@
             block: ".ruler",
             innblock: ".ruler-block",
             btn: ".btn",
-            oto: ".oto" //1:1 btn
+            oto: ".oto", //1:1 btn
+            toolbar: ".toolbar",
+            sure: ".sure",
+            tip: ".tip"
         },
         style: {
             active: "color: #286090; background-color: #fff; border-color: #204d74;"
