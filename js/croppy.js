@@ -466,7 +466,7 @@
                 }
             },
             _otoback: function() {
-
+                this.movex = this.movey = 0
                 this.delta = 1
                 this._draw()
             },
