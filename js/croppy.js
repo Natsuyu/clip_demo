@@ -98,6 +98,8 @@
 
                 this.close = this.father.$(this.setting.selector.close)[0]
 
+                this.oto = this.father.$(this.setting.selector.oto)[0]
+
                 this.btn = this.father.$(this.setting.selector.btn)
 
 
@@ -383,6 +385,7 @@
                 ctx.drawImage(this.image, this.initx + this.movex, this.inity + this.movey, this.image.width, this.image.height)
                 ctx.restore()
 
+
             },
             _canMove: function() {
                 var dx = this.nowx - this.prex,
@@ -462,7 +465,11 @@
                     }
                 }
             },
+            _otoback: function() {
 
+                this.delta = 1
+                this._draw()
+            },
             _getScale: function() {
                 var ratio = this.width / this.height,
                     img_ratio = this.image.width / this.image.height,
@@ -569,6 +576,17 @@
                 addEvent("mousewheel", function() {
                     that._mouseScroll()
                 }, this.layer)
+
+                addEvent("click", function() {
+
+                    that._activeBtn(that.oto)
+                    setTimeout(function() {
+                        that.oto.style.cssText = ""
+                    }, 200)
+
+                    that._otoback()
+
+                }, this.oto)
 
                 addEvent("click", function() {
                     // that.op = 1
@@ -681,7 +699,8 @@
             close: ".close",
             block: ".ruler",
             innblock: ".ruler-block",
-            btn: ".btn"
+            btn: ".btn",
+            oto: ".oto" //1:1 btn
         },
         style: {
             active: "color: #286090; background-color: #fff; border-color: #204d74;"
