@@ -27,14 +27,23 @@ $linewidth: 2px;
         float: left;
         border-style: dotted;
         border-color: #39f;
+        &:nth-child(1) {
+            border-top-style: solid;
+            border-left-style: solid;
+        }
         &:nth-child(2) {
+            border-top-style: solid;
+            border-right-style: solid;
             border-left-width: 0 !important;
         }
         &:nth-child(3),
         &:nth-child(4) {
+            border-bottom-style: solid;
+            border-left-style: solid;
             border-top-width: 0 !important;
         }
         &:nth-child(4) {
+            border-right-style: solid;
             border-left-width: 0 !important;
         }
     }

@@ -19,11 +19,19 @@
     float: left;
     border-style: dotted;
     border-color: #39f; }
+    .cover .ruler-block:nth-child(1) {
+      border-top-style: solid;
+      border-left-style: solid; }
     .cover .ruler-block:nth-child(2) {
+      border-top-style: solid;
+      border-right-style: solid;
       border-left-width: 0 !important; }
     .cover .ruler-block:nth-child(3), .cover .ruler-block:nth-child(4) {
+      border-bottom-style: solid;
+      border-left-style: solid;
       border-top-width: 0 !important; }
     .cover .ruler-block:nth-child(4) {
+      border-right-style: solid;
       border-left-width: 0 !important; }
   .cover .container {
     width: 850px;
