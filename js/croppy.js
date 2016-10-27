@@ -211,7 +211,7 @@
                 innctx.restore()
 
                 this.image = new Image()
-                $("#test")[0].src = this.image.src = inncan.toDataURL("image/png")
+                this.image.src = inncan.toDataURL("image/png")
                 var that = this
                 addEvent("load", function() {
                         that._draw()
