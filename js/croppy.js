@@ -240,10 +240,7 @@
                 this._draw()
             },
 
-            _match: function() {
-                if (this.match.active) this.block.style.display = "block"
-                else this.block.style.display = "none"
-            },
+
 
             _popState: function(flag) {
                 flag = flag ? 1 : 0
@@ -443,10 +440,10 @@
                 var ctx = this.ctx2
                 ctx.clearRect(0, 0, this.width, this.height)
 
-                ctx.strokeStyle = "#39f"
+                ctx.strokeStyle = "rgb(32, 77, 116)"
                 ctx.strokeRect(this.prex, this.prey, this.nowx - this.prex, this.nowy - this.prey)
 
-                ctx.strokeStyle = "#000"
+                // ctx.strokeStyle = "rgb(32, 77, 116)"
                 var width = this.nowx - this.prex,
                     height = this.nowy - this.prey,
                     step = [width / 3, height / 3]
@@ -535,22 +532,29 @@
                 this._initInn()
 
             },
-
+            _match: function() {
+                if (this.match.active) this.block.style.display = "block"
+                else this.block.style.display = "none"
+            },
             _activeBtn: function(obj) {
                 var that = this
                 this.btn.forEach(function(item) {
                     if (item == obj) return
-                    item.active = 0
+                    item.active = false
+                    item.style.cssText = ""
                 })
                 obj.active = !obj.active
                 if (obj.active) obj.style.cssText = this.setting.style.active
                 else obj.style.cssText = ""
+                    // this.btn.forEach(function(item) {
+                    //     console.log(item.active, item)
+                    // })
             },
 
             _initEvent: function() {
                 var that = this
                 this.btn.forEach(function(item) {
-                    item.active = 0
+                    item.active = false
                 })
                 addEvent("mousedown", function() {
                     that._mouseDown()
