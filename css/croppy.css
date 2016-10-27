@@ -12,7 +12,7 @@
     overflow: hidden;
     top: 250px;
     left: 400px;
-    cursor: move;
+    cursor: pointer;
     z-index: 3;
     display: none; }
   .cover .ruler-block {

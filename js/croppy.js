@@ -542,6 +542,7 @@
                     if (item == obj) return
                     item.active = false
                     item.style.cssText = ""
+                    if (item == that.match) that.block.style.display = "none"
                 })
                 obj.active = !obj.active
                 if (obj.active) obj.style.cssText = this.setting.style.active
