@@ -573,6 +573,7 @@
             },
             _activeBtn: function(obj) {
                 var that = this
+                that.op = 0
                 this.btn.forEach(function(item) {
                         if (item == obj) return
                         item.active = false
@@ -644,25 +645,21 @@
                 }, this.earase)
 
                 addEvent("click", function() {
-                    that.op = 0
                     that._activeBtn(that.match)
                     that._match()
                 }, this.match)
 
                 addEvent("click", function() {
-                    that.op = 0
                     that._activeBtn(that.clock)
                     that._clock(true)
 
                 }, this.clock)
                 addEvent("click", function() {
-                    that.op = 0
                     that._activeBtn(that.unclock)
                     that._clock(false)
 
                 }, this.unclock)
                 addEvent("click", function() {
-                    that.op = 0
                     that._activeBtn(that.preStep)
                     setTimeout(function() {
                         that.preStep.style.cssText = ""
@@ -671,7 +668,6 @@
 
                 }, this.preStep)
                 addEvent("click", function() {
-                    that.op = 0
                     that._activeBtn(that.nextStep)
                     that._step(true)
                     setTimeout(function() {
@@ -681,7 +677,6 @@
                 }, this.nextStep)
 
                 addEvent("click", function() {
-                    that.op = 0
                     that._activeBtn(that.reset)
                     that._reset()
                     setTimeout(function() {
@@ -689,7 +684,6 @@
                     }, 200)
                 }, this.reset)
                 addEvent("click", function() {
-                    that.op = 0
                     that._activeBtn(that.close)
                         // that._close()
                     console.log(that.match)
