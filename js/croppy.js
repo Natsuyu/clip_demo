@@ -371,17 +371,39 @@
                     this._canMove()
                 }
             },
+            _max: function(a, b, c, d) {
+                return Math.max(a, Math.max(b, Math.max(c, Math.max(d))))
+            },
+            _min: function(a, b, c, d) {
+                return Math.min(a, Math.min(b, Math.min(c, Math.min(d))))
+            },
             _draw: function() {
                 var ctx = this.ctx
                 ctx.save()
+
+                ctx.clearRect(0, 0, this.width, this.height)
                 ctx.fillStyle = "#fff"
-                ctx.fillRect(0, 0, this.width, this.height)
+
                 ctx.translate(this.width / 2, this.height / 2)
 
                 ctx.scale(this.delta, this.delta)
                 ctx.rotate(this.angle)
                 ctx.translate(-this.width / 2, -this.height / 2)
+                    // var x = this.initx + this.movex,
+                    //     y = this.inity + this.movey,
+                    //     w = this.image.width,
+                    //     h = this.image.height
 
+                // var p1 = this._tmpMatrix(x, y),
+                //     p2 = this._tmpMatrix(x + w, y),
+                //     p3 = this._tmpMatrix(x + w, y + h),
+                //     p4 = this._tmpMatrix(x, y + h)
+
+                // var x0 = this._min(p1.x, p2.x, p3.x, p4.x)
+                // y0 = this._min(p1.y, p2.y, p3.y, p4.y)
+                // x1 = this._max(p1.x, p2.x, p3.x, p4.x)
+                // y1 = this._max(p1.y, p2.y, p3.y, p4.y)
+                // ctx.fillRect(x0, y0, x1 - x0, y1 - y0)
                 ctx.drawImage(this.image, this.initx + this.movex, this.inity + this.movey, this.image.width, this.image.height)
                 ctx.restore()
 
@@ -530,7 +552,7 @@
                 this.ctx2.clearRect(0, 0, this.width, this.height)
 
                 this.ctx.fillStyle = "#fff"
-                this.ctx.fillRect(0, 0, this.width, this.height)
+                this.ctx.clearRect(0, 0, this.width, this.height)
                 this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
 
                 this.inncan = document.createElement("canvas")
