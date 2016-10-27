@@ -679,7 +679,7 @@
             btn: ".btn"
         },
         style: {
-            active: "background-color: #286090;border-color: #204d74;"
+            active: "color: #286090; background-color: #fff; border-color: #204d74;"
         },
         scaleSize: 12,
         rulerSize: 12,
