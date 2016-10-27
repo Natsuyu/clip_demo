@@ -11,50 +11,15 @@
     <img src="" alt="" id="test" style="border:1px solid #000;position:fixed;top:0;left:0;">
     <div class="wrapper">
         <img src="img/2.png" alt="" class="img" style="visibility: hidden">
-        <div class="cover">
-            <div class="container">
-                <h3 class="tip">缩放图片并移动田字格，使得单个汉字撑满田字格，或单个数字/字幕撑满半个田字格</h3>
-                <div class="layer-content">
-                    <div class="ruler">
-                        <div class="ruler-block"></div>
-                        <div class="ruler-block"></div>
-                        <div class="ruler-block"></div>
-                        <div class="ruler-block"></div>
-                    </div>
-                    <canvas class="canvas"></canvas>
-                    <canvas class="canvas-cover"></canvas>
 
-                </div>
-                <div class="toolbar">
-                    <div class="tools btn clip" active="true">裁剪</div>
-                    <div class="tools btn earase">擦除</div>
-                    <div class="tools btn match">文字匹配</div>
-                    <div class="tools" id="rotate">
-                        <div class=" btn clock">顺时针旋转</div>
-                        <input class="deg" type="text" placeholder="1">
-                        <div class="btn unclock">逆时针旋转</div>
-                    </div>
-                    <div class="tools btn oto">1:1</div>
-                    <div class="tools">
-                        <div class="btn preStep">上一步</div>
-                        <div class="btn nextStep">下一步</div>
-                    </div>
-                    <div class="tools">
-                        <div class="btn reset">重置</div>
-                        <div class="btn close">关闭</div>
-                    </div>
-
-                </div>
-                <div class="toolbar">
-                    <div class="btn sure">确认</div>
-                </div>
-            </div>
-
-        </div>
     </div>
     <script src="js/croppy.js"></script>
+    <script src="js/jquery-3.1.1.js"></script>
     <script>
-        $(".img").Croppy()
+        $$(".img").Croppy({
+            size: 12,
+            sessionId: "341234"
+        })
     </script>
 </body>
 
