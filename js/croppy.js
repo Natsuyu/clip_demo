@@ -100,8 +100,9 @@
 
                 this.btn = this.father.$(this.setting.selector.btn)
 
+
                 //init style
-                var rulerSize = this.setting.rulerSize,
+                var rulerSize = this.setting.rulerSize * this.setting.scaleSize,
                     lineweight = this.setting.lineweight
 
                 this.block = this.father.$(this.setting.selector.block)[0]
@@ -240,10 +241,8 @@
             },
 
             _match: function() {
-                this.bshow = !this.bshow
-                console.log(this.bshow)
-                    // if (this.bshow) this.block.style.display = "block", this.match.style.cssText = this.setting.style.active
-                    // else this.block.style.display = "none", this.match.style.cssText = ""
+                if (this.match.active) this.block.style.display = "block"
+                else this.block.style.display = "none"
             },
 
             _popState: function(flag) {
@@ -304,8 +303,9 @@
                     tmpctx = tmpcan.getContext("2d"),
                     canvas = this.inncan,
                     ctx = this.innctx,
-                    width = canvas.width * this.delta,
-                    height = canvas.height * this.delta,
+                    scale = this.setting.scaleSize,
+                    width = canvas.width * this.delta / scale,
+                    height = canvas.height * this.delta / scale,
                     image = new Image()
 
                 tmpcan.width = width
@@ -539,13 +539,19 @@
             _activeBtn: function(obj) {
                 var that = this
                 this.btn.forEach(function(item) {
-                    item.style.cssText = ""
+                    if (item == obj) return
+                    item.active = 0
                 })
-                obj.style.cssText = this.setting.style.active
+                obj.active = !obj.active
+                if (obj.active) obj.style.cssText = this.setting.style.active
+                else obj.style.cssText = ""
             },
 
             _initEvent: function() {
                 var that = this
+                this.btn.forEach(function(item) {
+                    item.active = 0
+                })
                 addEvent("mousedown", function() {
                     that._mouseDown()
                 })
@@ -671,6 +677,7 @@
         style: {
             active: "background-color: #286090;border-color: #204d74;"
         },
+        scaleSize: 12,
         rulerSize: 12,
         lineweight: 2,
         width: 850,
