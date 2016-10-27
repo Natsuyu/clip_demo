@@ -142,12 +142,17 @@
 
                 this.initx = (this.width - this.image.width) / 2
                 this.inity = (this.height - this.image.height) / 2
+                this.movex = this.movey = 0
 
 
                 var that = this
                 setTimeout(function() {
-                    that.ctx.clearRect(0, 0, that.width, that.height)
-                    that.ctx.drawImage(that.image, that.initx, that.inity, that.image.width, that.image.height)
+                    // that._initcanvas()
+                    // that.ctx.clearRect(0, 0, that.width, that.height)
+
+
+                    // that.ctx.drawImage(that.image, that.initx, that.inity, that.image.width, that.image.height)
+                    that._draw()
                 }, 400)
 
 
@@ -185,11 +190,11 @@
                 innctx.save()
                 innctx.beginPath()
 
-                innctx.moveTo(p1.x - this.initx, p1.y - this.inity)
-                innctx.lineTo(p2.x - this.initx, p2.y - this.inity)
-                innctx.lineTo(p3.x - this.initx, p3.y - this.inity)
-                innctx.lineTo(p4.x - this.initx, p4.y - this.inity)
-                innctx.lineTo(p1.x - this.initx, p1.y - this.inity)
+                innctx.moveTo(p1.x, p1.y)
+                innctx.lineTo(p2.x, p2.y)
+                innctx.lineTo(p3.x, p3.y)
+                innctx.lineTo(p4.x, p4.y)
+                innctx.lineTo(p1.x, p1.y)
                 innctx.closePath()
                 innctx.clip()
                 innctx.fillStyle = "#fff"
@@ -210,8 +215,8 @@
                 xx = (xx - ix) / this.delta + ix
                 yy = (yy - iy) / this.delta + iy
                 return {
-                    x: (xx - ix) * cosd - sind * (yy - iy) + ix,
-                    y: sind * (xx - ix) + cosd * (yy - iy) + iy
+                    x: (xx - ix) * cosd - sind * (yy - iy) + ix - this.initx - this.movex,
+                    y: sind * (xx - ix) + cosd * (yy - iy) + iy - this.inity - this.movey
                 }
             },
             _rotMarix: function(deg) {
@@ -222,19 +227,7 @@
                 this.initx = x * cosd - sind * y
                 this.inity = sind * x + cosd * y
             },
-            _draw: function() {
-                var ctx = this.ctx
-                ctx.save()
-                ctx.clearRect(0, 0, this.width, this.height)
-                ctx.translate(this.width / 2, this.height / 2)
 
-                ctx.scale(this.delta, this.delta)
-                ctx.rotate(this.angle)
-                ctx.translate(-this.width / 2, -this.height / 2)
-
-                ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
-                ctx.restore()
-            },
             _clock: function(op) {
                 this._pushState(false)
                 this.stack[1].length = 0
@@ -249,8 +242,8 @@
             _match: function() {
                 this.bshow = !this.bshow
                 console.log(this.bshow)
-                if (this.bshow) this.block.style.display = "block", this.match.style.cssText = this.setting.style.active
-                else this.block.style.display = "none", this.match.style.cssText = ""
+                    // if (this.bshow) this.block.style.display = "block", this.match.style.cssText = this.setting.style.active
+                    // else this.block.style.display = "none", this.match.style.cssText = ""
             },
 
             _popState: function(flag) {
@@ -293,21 +286,6 @@
                 var that = this
                 console.log(that)
                 addEvent("load", function() {
-                    console.log(that)
-                        // that.initx = that.originx
-                        // that.inity = that.originy
-                        // that.angle = 0
-                        // that.delta = 1
-                        // that._initInn()
-
-                    // that.ctx.clearRect(0, 0, that.width, that.height)
-
-                    // that.ctx.drawImage(that.image, that.initx, that.inity, that.image.width, that.image.height)
-                    // that.stack = [
-                    //     [],
-                    //     []
-                    // ]
-
                     that._initcanvas()
                 }, this.image)
 
@@ -365,13 +343,14 @@
                     this.prey = y - this.baseY
                 }
 
+                this.tmpy = this.movey, this.tmpx = this.movex
                 this.drag = true
                 this.lock = false
+
             },
 
 
             _mouseMove: function(e) {
-
                 if (!this.drag) return
                 this.lock = true
                 e = e || window.event
@@ -385,11 +364,37 @@
                     return
                 }
 
-                // console.log(x, y)
                 this.nowx = x <= 0 ? 0 : (x >= this.width ? this.width : x)
                 this.nowy = y <= 0 ? 0 : (y >= this.height ? this.height : y)
 
-                this.drawrect()
+                if (this.op) this.drawrect()
+                else {
+                    this._canMove()
+                }
+            },
+            _draw: function() {
+                var ctx = this.ctx
+                ctx.save()
+                ctx.fillStyle = "#fff"
+                ctx.fillRect(0, 0, this.width, this.height)
+                ctx.translate(this.width / 2, this.height / 2)
+
+                ctx.scale(this.delta, this.delta)
+                ctx.rotate(this.angle)
+                ctx.translate(-this.width / 2, -this.height / 2)
+
+                ctx.drawImage(this.image, this.initx + this.movex, this.inity + this.movey, this.image.width, this.image.height)
+                ctx.restore()
+
+            },
+            _canMove: function() {
+                var dx = this.nowx - this.prex,
+                    dy = this.nowy - this.prey
+
+                this.movex = this.tmpx + dx
+                this.movey = this.tmpy + dy
+
+                this._draw()
             },
 
             _mouseUp: function(e) {
@@ -408,6 +413,8 @@
                 } else if (this.op < 0) {
                     // earase is -1 
                     this._earase()
+                } else {
+
                 }
                 t = setTimeout(this._clearrect.bind(this), 300)
             },
@@ -418,7 +425,6 @@
 
             _mouseScroll: function(e) {
                 // this._pushState(false)
-
                 e = e || window.event
                 var delta = e.detail || -e.wheelDelta
 
@@ -434,10 +440,30 @@
             },
 
             drawrect: function() {
-                this.ctx2.clearRect(0, 0, this.width, this.height)
-                this.ctx2.strokeStyle = "#39f"
+                var ctx = this.ctx2
+                ctx.clearRect(0, 0, this.width, this.height)
 
-                this.ctx2.strokeRect(this.prex, this.prey, this.nowx - this.prex, this.nowy - this.prey)
+                ctx.strokeStyle = "#39f"
+                ctx.strokeRect(this.prex, this.prey, this.nowx - this.prex, this.nowy - this.prey)
+
+                ctx.strokeStyle = "#000"
+                var width = this.nowx - this.prex,
+                    height = this.nowy - this.prey,
+                    step = [width / 3, height / 3]
+
+                for (var i = 0; i < 2; i++) {
+                    for (var j = 1; j < 3; j++) {
+                        ctx.beginPath()
+                        var x = (i ? 0 : step[i] * j) + this.prex,
+
+                            y = (i ? step[i] * j : 0) + this.prey,
+                            w = (i ? width : height)
+                        ctx.moveTo(x, y)
+                        i ? ctx.lineTo(x + w, y) : ctx.lineTo(x, y + w)
+                        ctx.closePath()
+                        ctx.stroke()
+                    }
+                }
             },
 
             _getScale: function() {
@@ -499,6 +525,8 @@
                 this.ctx.clearRect(0, 0, this.width, this.height)
                 this.ctx2.clearRect(0, 0, this.width, this.height)
 
+                this.ctx.fillStyle = "#fff"
+                this.ctx.fillRect(0, 0, this.width, this.height)
                 this.ctx.drawImage(this.image, this.initx, this.inity, this.image.width, this.image.height)
 
                 this.inncan = document.createElement("canvas")
@@ -511,7 +539,6 @@
             _activeBtn: function(obj) {
                 var that = this
                 this.btn.forEach(function(item) {
-                    if (item == that.match) return
                     item.style.cssText = ""
                 })
                 obj.style.cssText = this.setting.style.active
@@ -544,6 +571,7 @@
 
                 addEvent("click", function() {
                     that.op = 0
+                    that._activeBtn(that.match)
                     that._match()
                 }, this.match)
 
